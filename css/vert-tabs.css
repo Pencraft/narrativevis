@@ -46,3 +46,10 @@ html { visibility:hidden; }
     border-left: none;
     height: 600px;
 }
+
+/* Style Annotation */
+.annotation {
+    position: absolute;
+    left: 970px;
+    font-weight: bold;
+}
