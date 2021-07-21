@@ -3,8 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Narrative Visualisation Project 2021</title>
+    <link rel="stylesheet" type="text/css" href="css/vert-tabs.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="js/openSlide.js"></script>
+    <script src="js/whoVis.js" async></script>
 </head>
-<body>
-    <p>Hello World!</p>
+<body onload="hideTabs()">
+    <div class="header">
+        <h1>US Suicide Trends</h1>
+    </div>
+    <div class="tab">
+        <button class="tablinks" id="Tab1" onclick="openSlide(event, 'Slide1')">From 1980-2015</button>
+        <button class="tablinks" id="Tab2" onclick="openSlide(event, 'Slide2')">By Sex</button>
+        <button class="tablinks" id="Tab3" onclick="openSlide(event, 'Slide3')">By Age</button>
+        <button class="tablinks" id="Tab4" onclick="openSlide(event, 'Slide4')">Compared Globally</button>
+    </div>
+
+    <div id="Slide1" class="tabcontent">
+        <h3>From 1980 to 2015</h3>
+    </div>
+
+    <div id="Slide2" class="tabcontent">
+        <h3>By Sex</h3>
+    </div>
+
+    <div id="Slide3" class="tabcontent">
+        <h3>By Age</h3>
+    </div>
+    <div id="Slide4" class="tabcontent">
+        <h3>How does the US compare?</h3>
+    </div>
 </body>
 </html>
