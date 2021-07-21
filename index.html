@@ -24,7 +24,8 @@
         <div class="annotation">
             <p>After a period of mostly <text style="color: #619CFF">declining</text> suicide rates in the United States between 1987
                 to 1999...</p>
-            <p>The number <text style="color: #F8766D">increased</text> nearly every year from 2000 to 2015.</p>
+            <p>The number <text style="color: #E69F00">increased</text> nearly every year from 2000 to 2015.</p>
+            <p>However, suicide victims are not distributed evenly amongst the US population, nor was the growth.</p>
         </div>
     </div>
 
@@ -34,18 +35,48 @@
             <p><text style="color: #F8766D">Males</text> make up the majority of US suicide victims.</p>
             <p>In 1979, <text style="color: #F8766D">74.4%</text> of suicide victims were
                 <text style="color: #F8766D">Male</text> and <text style="color: #619CFF">25.6%</text>
-            were <text style="color: #619CFF">Female</text>.</p>
+                were <text style="color: #619CFF">Female</text>.
+            </p>
             <p>In 2015, the <text style="color: #F8766D">Male</text> percentage had risen to
                 <text style="color: #F8766D">76.9%</text>, down from a high of
-                <text style="color: #F8766D">81.1%</text> in 1995.</p>
+                <text style="color: #F8766D">81.1%</text> in 1995.
+            </p>
         </div>
     </div>
 
     <div id="Slide3" class="tabcontent">
         <h3>US Suicides by Age</h3>
+        <div class="annotation">
+            <p>Americans aged <text style="color: #56bcc2">35-54</text> and <text style="color: #705BF8">55-74</text>
+                accounted for <text style="color: #56bcc2">35.4%</text> and <text style="color: #705BF8">27.0%</text>
+                of suicide victims in 2015.</p>
+            <p>The number of victims aged <text style="color: #705BF8">55-74</text> grew by
+            <text style="color: #705BF8">90%</text> between 1979 and 2015..
+            </p>
+            <p>The number of victims aged <text style="color: #56bcc2">35-54</text> grew by
+                <text style="color: #56bcc2">105%</text> in that same time.
+            </p>
+        </div>
     </div>
     <div id="Slide4" class="tabcontent">
         <h3>How does the US compare?</h3>
+        <div class="annotation">
+            <h3 id="SearchHeader"></h3>
+        </div>
+        <div class="annotation-low">
+            <input type="text" id="CountrySearch" onkeyup="filterCountries()" placeholder="Search..." title="Type in a country">
+
+            <ul id="CountryMenu">
+            </ul>
+
+            <br>
+            <input type="radio" class="radio" id="allradio" name="Plot" onclick="whichPlot='suicides';draw4Plot(whichCountry, whichPlot)" checked>
+            <label for="allradio">Total</label><br>
+            <input type="radio" class="radio" id="sexradio" name="Plot" onclick="whichPlot='sex';draw4Plot(whichCountry, whichPlot)">
+            <label for="sexradio">Sex</label><br>
+            <input type="radio" class="radio" id="ageradio" name="Plot" onclick="whichPlot='age';draw4Plot(whichCountry, whichPlot)">
+            <label for="ageradio">Age</label><br>
+        </div>
     </div>
 </body>
 </html>

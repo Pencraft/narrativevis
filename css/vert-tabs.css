@@ -54,3 +54,46 @@ html { visibility:hidden; }
     font-weight: bold;
     padding-right: 10px;
 }
+
+.annotation-low {
+    position: absolute;
+    left: 970px;
+    top: 200px;
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+/* Style the search box */
+#CountrySearch {
+    width: 100%;
+    font-size: 18px;
+    padding: 11px;
+    border: 1px solid #ddd;
+}
+
+/* Style the navigation menu */
+#CountryMenu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 180px;
+    overflow: scroll;
+}
+
+/* Style the navigation links */
+#CountryMenu li button {
+    width:  400px;
+    padding: 12px;
+    text-decoration: none;
+    color: black;
+    display: block
+}
+
+#CountryMenu li button:hover {
+    background-color: #ccc;
+}
+
+.radio {
+    width: 15px;
+    height: 15px;
+}

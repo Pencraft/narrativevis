@@ -4,7 +4,7 @@ let WHO = d3.csv("resources/who_suicide_statistics.csv", (d) => {
         country: d.country,
         year: +d.year,
         sex: d.sex,
-        age: d.age,
+        age: d.age.split(" ")[0],
         suicides: (d.suicides_no == "NA" ? NaN : +d.suicides_no),
         population: (d.population == "NA" ? NaN : +d.population)
     };
@@ -13,13 +13,20 @@ let WHO = d3.csv("resources/who_suicide_statistics.csv", (d) => {
 // Data processing
 WHO.then(function (data) {
     data = d3.filter(data, (d) => d.year != 2016);
-    const USA = d3.filter(data, (d) => d.country == "United States of America");
+    const USA = getCountry(data, "United States of America");
 
     drawSuicidesPlot(USA);
     drawSexPlot(USA);
+    drawAgePlot(USA);
+    addMenuItems(data);
+    draw4Plot("United States of America", "suicides");
 });
 
 var drawSuicidesPlot = function(data, slide = "#Slide1") {
+    d3.select(slide)
+        .selectAll("svg")
+        .remove();
+
     // set dimensions
     var margin = {top: 10, right: 30, bottom: 40, left: 60},
         width = 520 - margin.left - margin.right,
@@ -75,12 +82,12 @@ var drawSuicidesPlot = function(data, slide = "#Slide1") {
         .attr("transform", "rotate(-90)")
         .attr("y", -margin.left + 20)
         .attr("x", -margin.top - height/2 + 20)
-        .text("Suicides");
+        .text("Victims");
 
     // Colour by increasing/decreasing
     var colour = d3.scaleOrdinal()
         .domain(["increasing", "decreasing"])
-        .range([ "#F8766D", "#619CFF"]);
+        .range([ "#E69F00", "#619CFF"]);
 
     // Create tooltip
     var tooltip = d3.select(slide)
@@ -145,6 +152,10 @@ var drawSuicidesPlot = function(data, slide = "#Slide1") {
 }
 
 var drawSexPlot = function(data, slide = "#Slide2") {
+    d3.select(slide)
+        .selectAll("svg")
+        .remove();
+
     // set dimensions
     var margin = {top: 10, right: 30, bottom: 40, left: 60},
         width = 520 - margin.left - margin.right,
@@ -204,7 +215,7 @@ var drawSexPlot = function(data, slide = "#Slide2") {
         .attr("transform", "rotate(-90)")
         .attr("y", -margin.left + 20)
         .attr("x", -margin.top - height/2 + 20)
-        .text("Suicides");
+        .text("Victims");
 
     // Colour by increasing/decreasing
     var colour = d3.scaleOrdinal()
@@ -286,7 +297,7 @@ var drawSexPlot = function(data, slide = "#Slide2") {
         .attr("cx", (d) => x(d.year))
         .attr("cy", (d) => y(d.total))
         .attr("r", 5)
-        .style("fill", (d) => colour(d.colour))
+        .style("fill", (d) => colour(d.colour));
 
     svg.append("g")
         .selectAll("column")
@@ -305,6 +316,214 @@ var drawSexPlot = function(data, slide = "#Slide2") {
         .on("mousemove", mousemove);
 }
 
-var drawAgePlot = function(data, slide = "Slide3") {
+var drawAgePlot = function(data, slide = "#Slide3") {
+    d3.select(slide)
+        .selectAll("svg")
+        .remove();
 
+    // set dimensions
+    var margin = {top: 10, right: 30, bottom: 40, left: 60},
+        width = 520 - margin.left - margin.right,
+        height = 520 - margin.top - margin.bottom;
+
+    // append svg to Slide
+    let svg = d3.select(slide)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height",  height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    let sdata = Array.from(d3.rollup(data, (l) => d3.sum(l, (d) => d.suicides), (d) => d.year, (d) => d.age),
+        ([key, value]) => ({key, value}));
+    sdata = d3.map(sdata, (d) => d3.map(d.value.entries(), ([k, v]) => ({
+        "year": d.key,
+        "colour": k,
+        "total": v
+    })))
+        .flat();
+
+    // Add X axis
+    var x = d3.scaleLinear()
+        .domain([1979, 2015])
+        .range([0, width])
+        .nice();
+
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickSize(-height*1.3).ticks(10, "d"))
+        .select(".domain").remove();
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+        .domain([d3.min(sdata, (d) => d.total), d3.max(sdata, (d) => d.total)])
+        .range([height, 0])
+        .nice();
+
+    svg.append("g")
+        .call(d3.axisLeft(y).tickSize(-width*1.3).ticks(7))
+        .select(".domain").remove()
+
+    // Add X axis label
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width/2 + margin.left/2)
+        .attr("y", height + margin.top + 20)
+        .text("Year");
+
+    // Add Y axis label
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left + 20)
+        .attr("x", -margin.top - height/2 + 20)
+        .text("Victims");
+
+    // Colour by increasing/decreasing
+    const categories = ["5-14", "15-24", "25-34", "35-54", "55-74", "75+"];
+    var colour = d3.scaleOrdinal()
+        .domain(categories)
+        .range(["#E87D72", "#B4A033", "#53B74C", "#56bcc2", "#705BF8", "#E46DDD"]);
+
+    // Create tooltip
+    var tooltip = d3.select(slide)
+        .append("div")
+        .attr("id", "Tooltip3")
+        .style("position", "absolute")
+        .style("opacity", 0);
+
+    const mouseover = function(event, d) {
+        console.log(d3.selectAll(`.tooltip-${d.colour}[cx="${x(d.year)}"]`));
+        d3.selectAll(`.tooltip-${d.colour}[cx="${x(d.year)}"]`)
+            .style("opacity", 1);
+
+        tooltip.selectAll("text").remove();
+        tooltip.style("opacity", 1)
+            .attr("width", 50)
+            .attr("height", 50)
+            .style("background-color", colour(d.colour))
+            .style("color", "white")
+            .text(`${d.colour} year old victims in ${d.year}: ${d.total}`);
+    };
+
+    const mouseout = function(event, d) {
+        tooltip.style("opacity", 0);
+        d3.selectAll(`.tooltip-${d.colour}[cx="${x(d.year)}"]`)
+            .style("opacity", 0);
+    };
+
+    const mousemove = function(event, d) {
+        tooltip.style('left', `${event.pageX +  10}px`)
+            .style('top', `${event.pageY + 10}px`);
+    }
+
+    // Plot data
+    svg.append("g")
+        .selectAll("dot")
+        .data(sdata)
+        .enter()
+        .append("circle")
+        .attr("cx", (d) => x(d.year))
+        .attr("cy", (d) => y(d.total))
+        .attr("r", 5)
+        .style("fill", (d) => colour(d.colour));
+
+    // Add legend
+    svg.append("g")
+        .attr("transform", "translate(5, -20)")
+        .append("rect")
+        .attr("width", 80)
+        .attr("height", 165)
+        .style("fill", "white");
+
+    svg.append("g")
+        .attr("transform", "translate(25)")
+        .selectAll("dot")
+        .data(categories)
+        .enter()
+        .append("circle")
+        .attr("cx", 0)
+        .attr("cy", (d, i) => i * 25)
+        .attr("r", 5)
+        .style("fill", (d) => colour(d));
+
+    svg.append("g")
+        .attr("transform", "translate(35)")
+        .selectAll("dot")
+        .data(categories)
+        .enter()
+        .append("text")
+        .attr("y", (d, i) => 5 + i * 25)
+        .style("fill", (d) => colour(d) )
+        .text((d) => d);
+
+    // Plot tooltip points
+    svg.append("g")
+        .selectAll("dot")
+        .data(sdata)
+        .enter()
+        .append("circle")
+        .attr("class", (d) => `tooltip-${d.colour}`)
+        .attr("cx", (d) => x(d.year))
+        .attr("cy", (d) => y(d.total))
+        .attr("r", 5)
+        .style("fill", (d) => "aquamarine")
+        .style("opacity", 0)
+        .on("mouseover", mouseover)
+        .on("mouseout", mouseout)
+        .on("mousemove", mousemove);
+}
+
+var draw4Plot = async function(country, plot) {
+    let header = d3.select("#SearchHeader");
+    header.text(`Country: ${country}`);
+
+    let data = getCountry(await WHO, country);
+    drawPlot[plot](data, "#Slide4");
+}
+
+var drawPlot = {
+    "suicides": drawSuicidesPlot,
+    "sex": drawSexPlot,
+    "age": drawAgePlot
+}
+
+var whichPlot = "suicides";
+var whichCountry = "United States of America";
+
+var getCountry = function(data, name) {
+    data = d3.filter(data, (d) => d.year != 2016);
+    return d3.filter(data, (d) => d.country == name);
+}
+
+var addMenuItems = function(data) {
+    d3.select("#CountryMenu")
+        .selectAll("option")
+        .data(d3.group(data, (d) => d.country).keys())
+        .enter()
+        .append("li")
+        .append("button")
+        .attr("class", "CountryLink")
+        .attr("id", (d) => d)
+        .attr("onclick", (d) => `whichCountry="${d}";draw4Plot(whichCountry, whichPlot)`)
+        .text((d) => d);
+}
+
+var filterCountries = function() {
+    let input = d3.select("#CountrySearch")
+        .node()
+        .value
+        .toUpperCase();
+
+    let links = d3.selectAll(".CountryLink");
+    console.log(d3.map(links.nodes(), (l) => l.id));
+
+    links.data(d3.map(links.nodes(), (l) => l.id))
+        .style("display", function(d) {
+            if (!input || d.toUpperCase().includes(input)) {
+                return "";
+            } else {
+                return "none";
+            }
+        })
 }
