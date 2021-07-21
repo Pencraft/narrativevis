@@ -52,4 +52,5 @@ html { visibility:hidden; }
     position: absolute;
     left: 970px;
     font-weight: bold;
+    padding-right: 10px;
 }
