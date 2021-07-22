@@ -33,6 +33,7 @@ h1 {
     text-align: left;
     cursor: pointer;
     transition: 0.3s;
+    font-size: large;
 }
 
 /* Change background color of buttons on hover */
@@ -116,4 +117,13 @@ h1 {
 .radio {
     width: 15px;
     height: 15px;
+}
+
+#footer {
+    font-size: x-small;
+    color: #BBBBBB;
+}
+
+#footer a {
+    color: #AAAAAA;
 }
