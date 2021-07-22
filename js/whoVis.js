@@ -15,6 +15,7 @@ WHO.then(function (data) {
     data = d3.filter(data, (d) => d.year != 2016);
     const USA = getCountry(data, "United States of America");
 
+    console.log(USA);
     drawSuicidesPlot(USA);
     drawSexPlot(USA);
     drawAgePlot(USA);
@@ -393,8 +394,7 @@ var drawAgePlot = function(data, slide = "#Slide3") {
         .style("opacity", 0);
 
     const mouseover = function(event, d) {
-        console.log(d3.selectAll(`.tooltip-${d.colour}[cx="${x(d.year)}"]`));
-        d3.selectAll(`.tooltip-${d.colour}[cx="${x(d.year)}"]`)
+        d3.selectAll(`.tooltip-${d.colour.slice(0, -1)}[cx="${x(d.year)}"]`)
             .style("opacity", 1);
 
         tooltip.selectAll("text").remove();
@@ -408,7 +408,7 @@ var drawAgePlot = function(data, slide = "#Slide3") {
 
     const mouseout = function(event, d) {
         tooltip.style("opacity", 0);
-        d3.selectAll(`.tooltip-${d.colour}[cx="${x(d.year)}"]`)
+        d3.selectAll(`.tooltip-${d.colour.slice(0, -1)}[cx="${x(d.year)}"]`)
             .style("opacity", 0);
     };
 
@@ -463,7 +463,7 @@ var drawAgePlot = function(data, slide = "#Slide3") {
         .data(sdata)
         .enter()
         .append("circle")
-        .attr("class", (d) => `tooltip-${d.colour}`)
+        .attr("class", (d) => `tooltip-${d.colour.slice(0, -1)}`)
         .attr("cx", (d) => x(d.year))
         .attr("cy", (d) => y(d.total))
         .attr("r", 5)
@@ -516,7 +516,6 @@ var filterCountries = function() {
         .toUpperCase();
 
     let links = d3.selectAll(".CountryLink");
-    console.log(d3.map(links.nodes(), (l) => l.id));
 
     links.data(d3.map(links.nodes(), (l) => l.id))
         .style("display", function(d) {

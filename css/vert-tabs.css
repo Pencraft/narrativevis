@@ -4,6 +4,14 @@
 
 html { visibility:hidden; }
 
+h1 {
+    padding: 10px 20px;
+}
+
+.slide-title {
+    padding: 5px 5px;
+}
+
 /* Style the tab */
 .tab {
     float: left;
@@ -58,7 +66,7 @@ html { visibility:hidden; }
 .annotation-low {
     position: absolute;
     left: 970px;
-    top: 200px;
+    top: 240px;
     font-weight: bold;
     padding-right: 10px;
 }
