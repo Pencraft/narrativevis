@@ -289,6 +289,7 @@ var drawSexPlot = function(data, slide = "#Slide2") {
             .style('top', `${event.pageY + 5}px`);
     }
 
+    const categories = ["Male", "Female"];
     // Plot data
     svg.append("g")
         .selectAll("dot")
@@ -299,6 +300,35 @@ var drawSexPlot = function(data, slide = "#Slide2") {
         .attr("cy", (d) => y(d.total))
         .attr("r", 5)
         .style("fill", (d) => colour(d.colour));
+
+    // Add legend
+    svg.append("g")
+        .attr("transform", "translate(5, -20)")
+        .append("rect")
+        .attr("width", 80)
+        .attr("height", 60)
+        .style("fill", "white");
+
+    svg.append("g")
+        .attr("transform", "translate(25)")
+        .selectAll("dot")
+        .data(categories)
+        .enter()
+        .append("circle")
+        .attr("cx", 0)
+        .attr("cy", (d, i) => i * 25)
+        .attr("r", 5)
+        .style("fill", (d) => colour(d));
+
+    svg.append("g")
+        .attr("transform", "translate(35)")
+        .selectAll("dot")
+        .data(categories)
+        .enter()
+        .append("text")
+        .attr("y", (d, i) => 5 + i * 25)
+        .style("fill", (d) => colour(d) )
+        .text((d) => d);
 
     svg.append("g")
         .selectAll("column")
