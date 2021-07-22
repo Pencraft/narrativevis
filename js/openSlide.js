@@ -33,9 +33,9 @@ function hideTabs(evt) {
         tablinks[i].style.visibility = "hidden";
     }
 
-    // Hide all tab contents at start
+    // Hide all tab contents at start except
     tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
+    for (i = 1; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
 

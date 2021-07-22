@@ -55,6 +55,18 @@ h1 {
     height: 600px;
 }
 
+.hint1 {
+    font-size: large;
+    font-style: italic;
+}
+
+.hint2 {
+    position: absolute;
+    top: 400px;
+    font-size: large;
+    font-style: italic;
+    font-weight: normal;
+}
 /* Style Annotation */
 .annotation {
     position: absolute;
