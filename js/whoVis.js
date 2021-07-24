@@ -336,7 +336,7 @@ var drawSexPlot = function(data, slide = "#Slide2") {
         .enter()
         .append("rect")
         .attr("x", (d) => x(d.key) - 5)
-        .attr("y", -10)
+        .attr("y", 0)
         .attr("width", 10)
         .attr("height", height)
         .attr("class", "column")
