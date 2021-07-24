@@ -306,7 +306,7 @@ var drawSexPlot = function(data, slide = "#Slide2") {
         .attr("transform", "translate(5, -20)")
         .append("rect")
         .attr("width", 80)
-        .attr("height", 60)
+        .attr("height", 80)
         .style("fill", "white");
 
     svg.append("g")
