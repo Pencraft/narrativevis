@@ -306,7 +306,7 @@ var drawSexPlot = function(data, slide = "#Slide2") {
         .attr("transform", "translate(5, -20)")
         .append("rect")
         .attr("width", 80)
-        .attr("height", 80)
+        .attr("height", 60)
         .style("fill", "white");
 
     svg.append("g")
@@ -336,9 +336,9 @@ var drawSexPlot = function(data, slide = "#Slide2") {
         .enter()
         .append("rect")
         .attr("x", (d) => x(d.key) - 5)
-        .attr("y", 0)
+        .attr("y", -10)
         .attr("width", 10)
-        .attr("height", height)
+        .attr("height", height + 30)
         .attr("class", "column")
         .style("fill","aquamarine")
         .style("fill-opacity", 0)
